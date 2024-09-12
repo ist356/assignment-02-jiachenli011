@@ -19,21 +19,20 @@ def parse_packaging(packaging_data: str) -> list[dict]:
     input: "20 pieces in 1 pack / 10 packs in 1 carton / 4 cartons in 1 box"
     output: [{ 'pieces' : 20}, {'packs' : 10}, {'carton' : 4}, {'box' : 1}]
     '''
-    packaging_parts = packaging_data.split(' / ')
+    package = []
+    for data in packaging_data.split('/'):
+        item = data.split(" in ")[0]
+        quantity = int(item.split()[0])
+        item = item.split()[1].strip()
+        package.append({item: quantity})
     
-    result = []
-    
+    # get the last one
+    item = data.split(" in ")[-1]
+    quantity = int(item.split()[0])
+    item = item.split()[1].strip()
+    package.append({item: quantity})
 
-    pattern = r'(\d+)\s+(\w+)'
-    
-    for part in packaging_parts:
-        matches = re.findall(pattern, part)
-
-        for quantity, item in matches:
-            result.append({item: int(quantity)})
-    
-    return result
-
+    return package
 
 def calc_total_units(package: list[dict]) -> int:
     '''
