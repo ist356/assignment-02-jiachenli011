@@ -1,6 +1,7 @@
 '''
 This is a module for parsing packging data
 '''
+import re
 
 def parse_packaging(packaging_data: str) -> list[dict]:
     '''
@@ -18,39 +19,18 @@ def parse_packaging(packaging_data: str) -> list[dict]:
     input: "20 pieces in 1 pack / 10 packs in 1 carton / 4 cartons in 1 box"
     output: [{ 'pieces' : 20}, {'packs' : 10}, {'carton' : 4}, {'box' : 1}]
     '''
+    packaging_parts = packaging_data.split(' / ')
+    
     result = []
     
-    packaging_data = packaging_data.replace(' ', '')
-    packaging_parts = packaging_data.split('/')
+
+    pattern = r'(\d+)\s+(\w+)'
     
     for part in packaging_parts:
-        parts = part.split('in')
-        
+        matches = re.findall(pattern, part)
 
-        if len(parts) < 2:
-            print(f"Warning: invalid part '{part}' detected!")
-            continue  
-        
-        quantity_item = parts[0]  
-        unit = parts[1]  
-        
-        quantity_item_split = quantity_item.split(maxsplit=1)
-        if len(quantity_item_split) < 2:
-            print(f"Warning: invalid quantity_item '{quantity_item}' detected!")
-            continue  
-        
-        quantity = quantity_item_split[0]
-        item = quantity_item_split[1]
-        result.append({item: int(quantity)})
-        
-        unit_split = unit.split(maxsplit=1)
-        if len(unit_split) < 2:
-            print(f"Warning: invalid unit '{unit}' detected!")
-            continue  
-        
-        unit_quantity = unit_split[0]
-        unit_name = unit_split[1]
-        result.append({unit_name: int(unit_quantity)})
+        for quantity, item in matches:
+            result.append({item: int(quantity)})
     
     return result
 
