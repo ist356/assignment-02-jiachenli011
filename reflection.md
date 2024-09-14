@@ -23,3 +23,4 @@ Examples:
 
 `--- Reflection Below This Line ---`
 
+I encountered a lot of trouble when trying to write a function. In my first, second and third versions, different test contents failed the test. I found that I had many shortcomings in splitting. After many attempts, I chose to look at the solution and then understood that there was such a simple way to write it. I found that I might have thought too complicated.
